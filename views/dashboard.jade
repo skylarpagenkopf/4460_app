@@ -1,0 +1,193 @@
+extends layout
+
+block content
+	.navbar.navbar-default(role='navigation')
+		.container-fluid
+			.navbar-header
+				button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+					span.sr-only Toggle navigation
+					span.icon-bar
+					span.icon-bar
+					span.icon-bar
+				a.navbar-brand(href='/') Sofia
+			.navbar-collapse.collapse
+				ul.nav.navbar-nav
+					li.active
+						a(href='/dashboard')
+							span.glyphicon.glyphicon-th-list
+							span Dashboard
+					li
+						a(href='/lookup') 
+							span.glyphicon.glyphicon-search
+							span Lookup
+					li
+						a(href='/account')
+							span.glyphicon.glyphicon-user
+							span Account
+				ul.nav.navbar-nav.navbar-right
+					li
+						a(href='/signout') Sign Out
+	.content
+		.row
+			.col-md-3
+				- var count = 0;
+				.sectionheader REQUESTS
+				.panel.panel-default(id='new')
+					.panel-heading.panelgroup(data-toggle='collapse', data-parent='#new', href='#newPanel', aria-expanded='true', aria-controls='newPanel')
+						.row
+							.col-md-8
+								span New
+							.col-md-4.text-right
+								span.badge #{data.new.num}
+								span.glyphicon.glyphicon-chevron-down
+					.ul.list-group(id='newPanel', role='tabpanel', aria-labelledby='newPanel').panel-collapse.collapse.in
+						each task in data.new.tasks
+							a(href='#', id='#{task.id}', class=count === 0 ? 'active' : '').list-group-item
+								h5.list-group-item-heading.tasktitle #{task.title}
+								p.list-group-item-text.tasksummary #{task.summary}
+							- count++;
+				.panel.panel-default(id='open')
+					.panel-heading.panelgroup(data-toggle='collapse', data-parent='#open', href='#openPanel', aria-expanded='true', aria-controls='openPanel')
+						.row
+							.col-md-8
+								span Open
+							.col-md-4.text-right
+								span.badge #{data.open.num}
+								span.glyphicon.glyphicon-chevron-down
+					.ul.list-group(id='openPanel', role='tabpanel', aria-labelledby='openPanel').panel-collapse.collapse.in
+						each task in data.open.tasks
+							a(href='#', id='#{task.id}', class=count === 0 ? 'active' : '').list-group-item
+								h5.list-group-item-heading.tasktitle #{task.title}
+								p.list-group-item-text.tasksummary #{task.summary}
+							- count++;
+				.panel.panel-default(id='closed')
+					.panel-heading.panelgroup(data-toggle='collapse', data-parent='#closed', href='#closedPanel', aria-expanded='false', aria-controls='closedPanel')
+						.row
+							.col-md-8
+								span Closed
+							.col-md-4.text-right
+								span.badge #{data.closed.num}
+								span.glyphicon.glyphicon-chevron-left
+					.ul.list-group(id='closedPanel', role='tabpanel', aria-labelledby='closedPanel').panel-collapse.collapse.out
+						each task in data.closed.tasks
+							a(href='#', id='#{task.id}', class=count === 0 ? 'active' : '').list-group-item
+								h5.list-group-item-heading.tasktitle #{task.title}
+								p.list-group-item-text.tasksummary #{task.summary}
+							- count++;
+			.col-md-9
+				.sectionheader MESSAGES
+				- var count = 0;
+					each role in data
+						if typeof role != 'string'
+							each task in role.tasks
+								.panel.panel-default.messagepanel(id='#{task.id}', class=count === 0 ? '' : 'Hidden')
+									.panel-heading
+										.row
+											.col-md-8.tasktitle
+												span #{task.title}
+											.col-md-4.text-right
+												.btn-group
+													button(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false').btn.btn-xs.btn-default.dropdown-toggle Actions &nbsp;
+														span.caret
+													ul.dropdown-menu.pull-right
+														li.closetask(class=task.status == 'open' || task.status == 'new' ? '' : 'Hidden')
+															a(href='#') Mark as closed
+														li.opentask(class=task.status == 'closed' ? '' : 'Hidden')
+															a(href='#') Mark as open
+														li
+															a(href='#') Send to...
+									.ul.list-group
+										each message in task.messages
+											if message.sender_id != data.user_id
+												.list-group-item
+													.row.vertical-align
+														.col-md-2.text-center.senderinfo
+															a(href='../lookup/#{message.sender_id}')
+																img.img-thumbnail.img-responsive(src='#{message.sender_picture}')
+																h5 #{message.sender_name}
+														.col-md-10
+															p.list-group-item-text #{message.message}
+													.row 
+														.col-md-12.date.text-right #{message.time}
+											else
+												.list-group-item
+													.row.vertical-align
+														.col-md-10
+															p.list-group-item-text #{message.message}
+														.col-md-2.text-center.senderinfo
+															a(href='../lookup/#{message.sender_id}')
+																img.img-thumbnail.img-responsive(src='#{message.sender_picture}')
+																h5 #{message.sender_name}
+													.row 
+														.col-md-12.date #{message.time}	
+									hr
+									form.reply
+										.form-group
+											label(for='reply') Reply
+											textarea.form-control(rows='3',id='reply')
+										button(type='submit').btn.btn-default Send
+								- count ++;
+
+	script.
+		// panel collapse glyphicon switching
+		$('.panel').on('show.bs.collapse', function (e) {
+			var panel = $(e.currentTarget).attr('id'),
+				glyph = $('#' + panel + ' .glyphicon');
+			glyph.removeClass('glyphicon-chevron-left');
+			glyph.addClass('glyphicon-chevron-down');
+		});
+		$('.panel').on('hide.bs.collapse', function (e) {
+			var panel = $(e.currentTarget).attr('id'),
+				glyph = $('#' + panel + ' .glyphicon');
+			glyph.removeClass('glyphicon-chevron-down');
+			glyph.addClass('glyphicon-chevron-left');
+		});
+
+		// active task handling
+		$('a.list-group-item').click(function (e) {
+			var id = $(e.currentTarget).attr('id');
+			e.preventDefault();
+			// change highlighted task in left col
+			$('a.list-group-item').removeClass('active');
+			$(e.currentTarget).addClass('active');
+			// change messages being seen in right col
+			$('.messagepanel').addClass('Hidden');
+			$('#' + id + '.messagepanel').removeClass('Hidden');
+		});
+
+		// handle opening and closing task
+		$('.opentask').click(function (e) {
+			e.preventDefault();
+			var id = $(e.currentTarget).parent().parent().parent().parent().parent().parent().attr('id'),
+				task = $('#' + id + '.list-group-item');
+			$('#open .ul').prepend(task);
+			$('#closed span.badge').html(parseInt($('#closed span.badge').html()) - 1);
+			$('#open span.badge').html(parseInt($('#open span.badge').html()) + 1);
+			$(e.currentTarget).siblings().each(function () {
+				if ($(this).hasClass('closetask')) {
+					$(this).removeClass('Hidden');
+				}
+			});
+			$(e.currentTarget).addClass('Hidden');
+			// send get request to change db
+		});
+		$('.closetask').click(function (e) {
+			e.preventDefault();
+			var id = $(e.currentTarget).parent().parent().parent().parent().parent().parent().attr('id'),
+				task = $('#' + id + '.list-group-item'),
+				taskpanel = $('#' + id + '.list-group-item').parent().parent();
+			if (taskpanel.attr('id') == 'new') {
+				$('#new span.badge').html(parseInt($('#new span.badge').html()) - 1);
+			} else {
+				$('#open span.badge').html(parseInt($('#open span.badge').html()) - 1);
+			}
+			$('#closed .ul').prepend(task);
+			$('#closed span.badge').html(parseInt($('#closed span.badge').html()) + 1);
+			$(e.currentTarget).siblings().each(function () {
+				if ($(this).hasClass('opentask')) {
+					$(this).removeClass('Hidden');
+				}
+			});
+			$(e.currentTarget).addClass('Hidden');
+			// send get request to change db
+		});

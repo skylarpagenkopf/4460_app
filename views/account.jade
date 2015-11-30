@@ -1,0 +1,29 @@
+extends layout
+
+block content
+	.navbar.navbar-default(role='navigation')
+		.container-fluid
+			.navbar-header
+				button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+					span.sr-only Toggle navigation
+					span.icon-bar
+					span.icon-bar
+					span.icon-bar
+				a.navbar-brand(href='/') Sofia
+			.navbar-collapse.collapse
+				ul.nav.navbar-nav
+					li
+						a(href='/dashboard')
+							span.glyphicon.glyphicon-th-list
+							span Dashboard
+					li
+						a(href='/lookup') 
+							span.glyphicon.glyphicon-search
+							span Lookup
+					li.active
+						a(href='/account')
+							span.glyphicon.glyphicon-user
+							span Account
+				ul.nav.navbar-nav.navbar-right
+					li
+						a(href='/signout') Sign Out

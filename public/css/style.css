@@ -1,3 +1,106 @@
 body {
-  padding: 20px 50px 20px 50px;
+	font-family: 'Lato';
+}
+
+.homebrand {
+	font-family: 'Sofia';
+	font-weight: bold;
+	color: #B23AEE;
+	font-size: 100px;
+	text-shadow: 0px 1px 1px #BDA0CB;
+}
+
+.content {
+	padding: 0px 20px;
+}
+
+.navbar {
+	margin-bottom: 10px;
+}
+
+.navbar .glyphicon {
+	margin-right: 5px;
+}
+
+.dropdown-menu .glyphicon {
+	margin-right: 5px;
+}
+
+.navbar-default .navbar-brand {
+	font-family: 'Sofia';
+	font-weight: bold;
+	color: #B23AEE;
+	font-size: 30px;
+	text-shadow: 0px 1px 1px #BDA0CB;
+}
+
+.navbar-default .navbar-brand:hover {
+	color: #B23AEE;
+}
+
+a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.active:focus {
+	background-color: #9A32CD;
+	border-color: #BF3EFF;
+}
+
+.sectionheader {
+	font-weight: bold;
+	font-size: 13px;
+	color: #B23AEE;
+	margin: 5px 0px 5px 0px;
+}
+
+.reply {
+	padding: 0px 30px 20px 30px;
+}
+
+.date {
+	font-size: 12px;
+}
+
+.vertical-align {
+    display: flex;
+    align-items: center;
+}
+
+.senderinfo {
+	max-height: 100px;
+}
+
+.senderinfo img {
+	max-height: 80px;
+}
+
+.panelgroup {
+	cursor: pointer;
+}
+
+.panelgroup .glyphicon-chevron-down, .panelgroup .glyphicon-chevron-left {
+	color: #999999;
+	margin-left: 5px;
+	font-size: 12px;
+}
+
+.tasktitle {
+	max-height: 17px;
+	overflow: hidden;
+}
+
+.tasksummary {
+	max-height: 36px;
+	overflow: hidden;
+}
+
+.Hidden {
+	display: none;
+}
+
+@font-face {
+	font-family: 'Sofia';
+	src: url('../fonts/Champagne & Limousines.ttf');
+}
+
+@font-face {
+	font-family: 'Lato';
+	src: url('../fonts/Lato-Regular.ttf');
 }

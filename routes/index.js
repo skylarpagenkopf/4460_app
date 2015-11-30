@@ -18,4 +18,29 @@ router.get('/', function(req, res) {
 	res.render('index', { title: 'Home'});
 });
 
+router.get('/dashboard', function(req, res) {
+	var data = require('../public/mockdata/dashboard.json');
+	res.render('dashboard', {
+		title: 'Dashboard',
+		data: data
+	});
+});
+
+router.get('/account', function(req, res) {
+	res.render('account', { title: 'Account'});
+});
+
+router.get('/lookup', function(req, res) {
+	res.render('lookup', { title: 'Lookup'});
+});
+
+router.get('/lookup/:senior_id', function(req, res) {
+	res.render('lookup_dashboard', { title: 'Lookup'});
+});
+
+router.get('/signout', function(req, res) {
+	// sign user out before redirect
+	res.redirect('/');
+});
+
 module.exports = router;
