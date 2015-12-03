@@ -22,7 +22,9 @@ router.get('/dashboard', function(req, res) {
 	var data = require('../public/mockdata/dashboard.json');
 	res.render('dashboard', {
 		title: 'Dashboard',
-		data: data
+		data: data,
+		user_id: '00',
+		user_picture: 'http://www.nerdist.com/wp-content/uploads/2011/01/tenth-doctor.jpg'
 	});
 });
 
