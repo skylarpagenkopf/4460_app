@@ -1,5 +1,9 @@
 var express = require('express');
 var router = express.Router();
+var accountSid = 'AC5015a425291500c955445bb60281951c'; 
+var authToken = 'b983d98d0b9b83f7a817d31776226f7f';
+//require the Twilio module and create a REST client 
+var client = require('twilio')(accountSid, authToken);
 
 // connect to db to get info for page rendering
 var mongo = require('mongodb');
@@ -26,6 +30,19 @@ router.get('/dashboard', function(req, res) {
 		user_id: '00',
 		user_picture: 'http://www.nerdist.com/wp-content/uploads/2011/01/tenth-doctor.jpg'
 	});
+});
+
+// send message
+router.post('/dashboard', function(req, res) {
+	var message = "",
+		senior_number = "";
+	// client.messages.create({ 
+	// 	to: senior_number, 
+	// 	from: "+18302667208", 
+	// 	body: message,   
+	// }, function(err, message) { 
+	// 	console.log(message.sid); 
+	// });
 });
 
 router.get('/account', function(req, res) {
