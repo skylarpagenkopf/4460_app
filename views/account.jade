@@ -27,3 +27,131 @@ block content
 				ul.nav.navbar-nav.navbar-right
 					li
 						a(href='/signout') Sign Out
+	.content
+		.row
+			.col-md-3
+				.sectionheader RESULTS
+				.panel.panel-default(id='info')
+					.panel-heading.panelgroup
+						.row
+							.col-md-8
+								span User Info
+					.ul.list-group
+						a(href='#', id='userprofile').list-group-item.active
+							h5.list-group-item-heading.tasktitle #{data.info.name} 
+							p.list-group-item-text.tasksummary User Profile
+				.panel.panel-default(id='tasks')
+					.panel-heading.panelgroup
+						.row
+							.col-md-8
+								span Request History
+					.ul.list-group
+						each task in data.tasks
+							a(href='#', id='#{task.id}').list-group-item
+								h5.list-group-item-heading.tasktitle #{task.title}
+								p.list-group-item-text.tasksummary #{task.summary}
+			.col-md-9
+				.sectionheader DETAILS
+				.panel.panel-default.messagepanel(id='userprofile')
+					.panel-heading
+						.row
+							.col-md-8.tasktitle
+								span User Profile
+					.panel-body
+						.row
+							.col-md-4
+								h4 #{data.info.name}
+							.col-md-8
+								h4 Overview
+						.row
+							.col-md-4
+								img.img-thumbnail.img-responsive(src='#{data.info.picture}')
+							.col-md-8
+								.row
+									.col-md-4.text-center
+										.large-header #{data.info.num_open}
+									.col-md-4.text-center
+										.large-header #{data.info.num_closed}
+									.col-md-4.text-center
+										.large-header #{data.info.rating}
+								.row
+									.col-md-4.text-center
+										p open requests
+									.col-md-4.text-center
+										p closed requests
+									.col-md-4.text-center
+										p rating
+								.row.margin-top-20 
+									.col-md-12
+										h4 Info
+										p Phone number: &nbsp;
+											span #{data.info.phone_number}
+										p #{data.info.personal_info}
+								.row.margin-top-20 
+									.col-md-12
+										h4 Seniors spoken to
+										each senior in data.info.linked_seniors
+											p
+												a(href='/lookup/#{senior.id}') #{senior.name}
+
+
+				each task in data.tasks
+					.panel.panel-default.messagepanel(id='#{task.id}').Hidden
+						.panel-heading
+							.row
+								.col-md-8.tasktitle
+									span #{task.title}
+								.col-md-4.text-right
+									.btn-group
+										button(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false').btn.btn-xs.btn-default.dropdown-toggle Actions &nbsp;
+											span.caret
+										ul.dropdown-menu.pull-right
+											li.closetask(class=task.status == 'open' || task.status == 'new' ? '' : 'Hidden')
+												a(href='#') Mark as closed
+											li.opentask(class=task.status == 'closed' ? '' : 'Hidden')
+												a(href='#') Mark as open
+											li
+												a(href='#') Send to...
+						.ul.list-group
+							each message in task.messages
+								if message.sender_id != user_id
+									.list-group-item
+										.row.vertical-align
+											.col-md-2.text-center.senderinfo
+												a(href='../lookup/#{message.sender_id}')
+													img.img-thumbnail.img-responsive(src='#{message.sender_picture}')
+													h5 #{message.sender_name}
+											.col-md-10
+												p.list-group-item-text #{message.message}
+										.row 
+											.col-md-12.date.text-right #{message.time}
+								else
+									.list-group-item
+										.row.vertical-align
+											.col-md-10
+												p.list-group-item-text #{message.message}
+											.col-md-2.text-center.senderinfo
+												a(href='../lookup/#{message.sender_id}')
+													img.img-thumbnail.img-responsive(src='#{message.sender_picture}')
+													h5 #{message.sender_name}
+										.row 
+											.col-md-12.date #{message.time}	
+						hr
+						form.reply
+							.form-group
+								label(for='reply') Reply
+								textarea.form-control(rows='3',id='reply')
+							button(type='submit').btn.btn-default Send
+
+	script.
+		// active task handling
+		$('a.list-group-item').click(function (e) {
+			var id = $(e.currentTarget).attr('id');
+			e.preventDefault();
+			// change highlighted task in left col
+			$('a.list-group-item').removeClass('active');
+			$(e.currentTarget).addClass('active');
+			// change messages being seen in right col
+			$('.messagepanel').addClass('Hidden');
+			$('#' + id + '.messagepanel').removeClass('Hidden');
+		});

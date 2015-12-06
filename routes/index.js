@@ -29,15 +29,39 @@ router.get('/dashboard', function(req, res) {
 });
 
 router.get('/account', function(req, res) {
-	res.render('account', { title: 'Account'});
+	// get list of seniors they talk to
+	// get tasks they are participating on
+	// send to account template
+	var data = require('../public/mockdata/account.json');
+	res.render('account', { 
+		title: 'Account', 
+		data: data,
+		user_id: "00"
+	});
 });
 
 router.get('/lookup', function(req, res) {
 	res.render('lookup', { title: 'Lookup'});
 });
 
-router.get('/lookup/:senior_id', function(req, res) {
-	res.render('lookup_dashboard', { title: 'Lookup'});
+router.post('/lookup', function(req, res) {
+	// check if query matches a user profile
+		// redirect to user profile
+
+	// check if query matches task information
+		// aggregate task data
+		// send to dashboard template
+	res.render('lookup', { title: 'Lookup' });
+});
+
+router.get('/lookup/:account_id', function(req, res) {
+	// get account profile
+	var data = require('../public/mockdata/lookup.json');
+	res.render('lookup_dashboard', { 
+		title: 'Lookup', 
+		data: data,
+		user_id: "00"
+	});
 });
 
 router.get('/signout', function(req, res) {

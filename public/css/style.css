@@ -71,7 +71,7 @@ a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.acti
 	max-height: 80px;
 }
 
-.panelgroup {
+#open .panelgroup, #closed .panelgroup, #new .panelgroup {
 	cursor: pointer;
 }
 
@@ -93,6 +93,34 @@ a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.acti
 
 .Hidden {
 	display: none;
+}
+
+.lookup {
+	margin: 50px 100px 0px 100px;
+}
+.searchform .form-group {
+	width: 70%;
+}
+.searchform .input-group {
+	width: 99%;
+}
+
+.header {
+	font-weight: bold;
+	font-size: 15px;
+	color: #B23AEE;
+	margin: 5px 0px 5px 0px;
+}
+
+.large-header {
+	font-weight: bold;
+	font-size: 40px;
+	color: #B23AEE;
+	margin: 5px 0px 5px 0px;
+}
+
+.margin-top-20 {
+	margin-top: 20px;
 }
 
 @font-face {
