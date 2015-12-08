@@ -169,7 +169,7 @@ block content
 				}
 			});
 			$(e.currentTarget).addClass('Hidden');
-			// send get request to change db
+			// send get request to access? db
 		});
 		$('.closetask').click(function (e) {
 			e.preventDefault();
@@ -190,6 +190,7 @@ block content
 			});
 			$(e.currentTarget).addClass('Hidden');
 			// send get request to change db
+			// post request perhaps? also db is changed in reply code
 		});
 
 		// handle reply submission
@@ -202,12 +203,15 @@ block content
 				newhtml,
 				datestring,
 				ampm;
+
 			// no message in the textarea
 			if (message == '') {
 				return;
 			}
+			
 			// immediate update of user view w/o refresh
 			datestring = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + ' ';
+
 			if (date.getHours() > 11) {
 				datestring = datestring + (date.getHours() - 12) + ':';
 				ampm = 'PM';
@@ -215,13 +219,27 @@ block content
 				datestring = datestring + date.getHours() + ':';
 				ampm = 'AM';
 			}
+	
 			if (date.getMinutes() < 10) {
 				datestring = datestring + '0' + date.getMinutes() + ' ' + ampm;
 			} else {
 				datestring = datestring + date.getMinutes() + ' ' + ampm;
 			}
-			newhtml = "<div class=\"list-group-item\"><div class=\"row vertical-align\"><div class=\"col-md-10\"><p class=\"list-group-item-text\">" + message + "</p></div><div class=\"col-md-2 text-center senderinfo\"><a href=\"../lookup/#{user_id}\"><img src=\"#{user_picture}\" class=\"img-thumbnail img-responsive\"><h5>The Doctor</h5></a></div></div><div class=\"row\"> <div class=\"col-md-12 date\">" + datestring + "</div></div></div>"
-			$(panel).append(newhtml);
-			$(textarea).val('');
+			
+			var messagesFlyRef = new Flybase("baad4775-71b7-41ef-ad89-090c48e3956e", "sofia", "messages");
+			messagesFlyRef.set({from:"+18302667208", to: "+12104409806", message: message,timeof: datestring});
+			
+			messagesFlyRef.on('added', function(data)	{
+				var messData = data.value();
+				addChat(messData.from, messData.to, messData.message, messData.timeof);
+				//alert('something was added i supposed');
+			});
+
+			function addChat(from, two, message, time){
+			
+				newhtml = "<div class=\"list-group-item\"><div class=\"row vertical-align\"><div class=\"col-md-10\"><p class=\"list-group-item-text\">" + message + "</p></div><div class=\"col-md-2 text-center senderinfo\"><a href=\"../lookup/#{user_id}\"><img src=\"#{user_picture}\" class=\"img-thumbnail img-responsive\"><h5>The Doctor</h5></a></div></div><div class=\"row\"> <div class=\"col-md-12 date\">" + time + "</div></div></div>"
+				$(panel).append(newhtml);
+				$(textarea).val('');
+			}
 			// send post request for message to db/messaging service
 		});
