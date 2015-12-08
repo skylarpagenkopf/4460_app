@@ -14,15 +14,6 @@ var twilio = require('twilio');
 // 	db = database;
 // });
 
-//Flybase credentials
-var api_key = 'baad4775-71b7-41ef-ad89-090c48e3956e';
-var appname = 'sofia';
-
-//require('flybase').init(appname, **collection**, api_key)
-var usersFlyRef = require('flybase').init(appname, 'users', api_key);
-var messagesFlyRef = require('flybase').init(appname, 'messages', api_key);
-
-
 // get home page
 router.get('/', function(req, res) {
 	res.render('index', { title: 'Home'});
@@ -49,11 +40,11 @@ router.post('/reply', function(req, res){
 
 // send message
 router.post('/dashboard', function(req, res) {
-	var message = "test",
-	 senior_number = "+12104409806";
-	var messagesFlyRef = require('flybase').init(appname, 'messages', api_key);
-	messagesFlyRef.set({from:"+18302667208", to: senior_number, body: message,time: getTime()});
-	console.log(getTime());
+	// var message = "test",
+	//  senior_number = "+12104409806";
+	// var messagesFlyRef = require('flybase').init(appname, 'messages', api_key);
+	// messagesFlyRef.set({from:"+18302667208", to: senior_number, body: message,time: getTime()});
+	// console.log(getTime());
 	// client.messages.create({ 
 	// 	to: senior_number, 
 	// 	from: "+18302667208", 
