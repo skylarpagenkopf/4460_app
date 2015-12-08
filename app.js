@@ -49,17 +49,7 @@ app.use(function(err, req, res, next) {
 	});
 });
 
-app.set('port', process.env.PORT || 3000);
-
-var client=twilio('AC5015a425291500c955445bb60281951c', 'b983d98d0b9b83f7a817d31776226f7f' );
-var twilio_number = '+18302667208';
-
-var api_key = 'baad4775-71b7-41ef-ad89-090c48e3956e';
-var appname = 'sofia';
-var userCollection = 'user';
-var messCollection = 'messages';
-var userRef = require('flybase').init(appname, userCollection, api_key);
-var messagesRef = require('flybase').init(appname, messCollection, api_key);
+app.set('port', process.env.PORT || 8080);
 
 http.createServer(app).listen(app.get('port'), function(){
 	console.log('Express server listening on port ' + app.get('port'));
