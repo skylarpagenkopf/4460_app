@@ -8,8 +8,8 @@ var twilio_number = '+18302667208';
 
 var api_key = "baad4775-71b7-41ef-ad89-090c48e3956e";
 var appname = "Sofia";
-var usersRef = new Flybase(api_key, appname, "user");
-var messagesRef = new Flybase(api_key, appname, "messages");
+var usersRef = require('flybase').init(appname, 'user', api_key);
+var messagesRef = require('flybase').init(appname, 'messages', api_key);
 
 var receiveUserMessage = function(req, res){
 	var d = new Date();
