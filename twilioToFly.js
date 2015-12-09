@@ -15,7 +15,7 @@ var receiveUserMessage = function(req, res){
 	var d = new Date();
 	var date = d.toLocaleString();
 
-	usersRef.where({'phone_number': req.param('From')}).on('value', function(data){
+	usersRef.where({'phone_number': req.params('From')}).on('value', function(data){
 		console.log(JSON.stringify(data));
 	});
 
