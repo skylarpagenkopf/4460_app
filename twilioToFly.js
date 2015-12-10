@@ -35,16 +35,15 @@ var receiveUserMessage = function(req, res){
 				sender_id: userId,
 				time: date
 			});
+			var resp = new twilio.TwimlResponse();
+			resp.message("\nHello " + seniorFirstName + ",\nThis is Rebecca, I got your message and will get back to you shortly.");
+			res.writeHead(200, {
+				'Content-Type':'text/xml'
+			});
+			res.end(resp.toString());
 		});
 
 	});
-
-	var resp = new twilio.TwimlResponse();
-	resp.message("Hello " + seniorFirstName + ",\nThis is Rebecca, I got your message and will get back to you shortly.");
-	res.writeHead(200, {
-		'Content-Type':'text/xml'
-	});
-	res.end(resp.toString());
 };
 
 var replyToUser = function(req, res){
