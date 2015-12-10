@@ -23,6 +23,8 @@ var receiveUserMessage = function(req, res){
 	usersRef.where({'phone_number': number}).on('value', function(data){
 		var userId = data.raw[0]._id;
 		seniorFirstName = data.raw[0].name.split(' ')[0];
+		console.log('Name: ' + data.raw[0].name);
+		console.log('FirstName: ' + data.raw[0].name.split(' ')[0]);
 		console.log('UserId: ' +  userId);
 		convoRef.where({'senior_id': userId, 'status':'open'}).on('value', function(convoData){
 			var conversation = convoData.raw[0]._id;
@@ -38,7 +40,7 @@ var receiveUserMessage = function(req, res){
 	});
 
 	var resp = new twilio.TwimlResponse();
-	resp.message("Hello" + seniorFirstName + ",\n This is Rebecca, I got your message and will get back to you shortly.");
+	resp.message("Hello " + seniorFirstName + ",\nThis is Rebecca, I got your message and will get back to you shortly.");
 	res.writeHead(200, {
 		'Content-Type':'text/xml'
 	});
