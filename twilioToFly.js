@@ -49,6 +49,7 @@ var receiveUserMessage = function(req, res){
 var replyToUser = function(req, res){
 	var d = new Date();
 	var date = d.toLocaleString();
+	console.log(JSON.stringify(req));
 };
 
 router.receiveUserMessage = receiveUserMessage;
