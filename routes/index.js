@@ -35,7 +35,7 @@ router.post('/message', function(req, res){
 });
 
 router.post('/reply', function(req, res){
-
+	twilio.replyToUser(req, res);
 });
 
 // send message
