@@ -16,6 +16,7 @@ var receiveUserMessage = function(req, res){
 	var date = d.toLocaleString();
 
 	var number = req.params('From').substring(1);
+	console.log(number);
 
 	usersRef.where({'phone_number': number}).on('value', function(data){
 		console.log(JSON.stringify(data.value()));
@@ -34,7 +35,7 @@ var receiveUserMessage = function(req, res){
 		'Content-Type':'text/xml'
 	});
 	response.end(resp.toString());
-}
+};
 
 router.receiveUserMessage = receiveUserMessage;
 module.exports = router;
