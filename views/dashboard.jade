@@ -227,8 +227,29 @@ block content
 			}
 			
 			var messagesFlyRef = new Flybase("baad4775-71b7-41ef-ad89-090c48e3956e", "sofia", "messages");
-			messagesFlyRef.set({from:"+18302667208", to: "+12104409806", message: message,timeof: datestring});
-			
+			var convoFlyRef = new Flybase("baad4775-71b7-41ef-ad89-090c48e3956e", "sofia", "conversations");
+
+			var date = new Date().toLocaleString();
+			//___CHANGE___
+			//var senior_id = data.senior_id;
+			// var worker_id = someting;
+			var senior_id = '5667431989221doc286352926';
+			var worker_id = '566740b102b50doc1377109252';
+
+
+			convoFlyRef.where({'senior_id': senior_id , 'status':'open'}).on('value', function(convoData){
+				var convo = convoData.raw[0]._id;
+				var newMessage = {
+					body: message, 
+					conversation_id: convo,
+					sender_id: worker_id,
+					time: date
+				};
+
+				messagesFlyRef.set(newMessage);
+				$.post("/reply", {JSON.stringify(newMessage)});
+			});
+
 			messagesFlyRef.on('added', function(data)	{
 				var messData = data.value();
 				addChat(messData.from, messData.to, messData.message, messData.timeof);
