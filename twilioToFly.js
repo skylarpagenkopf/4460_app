@@ -7,26 +7,32 @@ var client = twilio('AC5015a425291500c955445bb60281951c', 'b983d98d0b9b83f7a817d
 var twilio_number = '+18302667208';
 
 var api_key = "baad4775-71b7-41ef-ad89-090c48e3956e";
-var appname = "Sofia";
+var appname = "sofia";
 var usersRef = require('flybase').init(appname, 'user', api_key);
+var convoRef = require('flybase').init(appname, 'conversations', api_key);
 var messagesRef = require('flybase').init(appname, 'messages', api_key);
 
 var receiveUserMessage = function(req, res){
 	var d = new Date();
 	var date = d.toLocaleString();
 
-	var number = req.params('From').substring(1);
+	var number = req.param('From').substring(1);
 	console.log(number);
 
 	usersRef.where({'phone_number': number}).on('value', function(data){
-		console.log(JSON.stringify(data.value()));
-	});
+		var userId = data.raw[0]._id;
+		console.log('UserId: ' +  userId);
+		convoRef.where({'senior_id': userId, 'status':'open'}).on('value', function(convoData){
+			var conversation = convoData.raw[0]._id;
+			console.log('ConvoID: ' + conversation);
+			messagesRef.push({
+				body: req.param('Body'),
+				conversation_id: conversation,
+				sender_id: userId,
+				time: date
+			});
+		});
 
-	messagesRef.push({
-		body:'test',
-		conversation_id:'test',
-		sender_id:'test',
-		time: 'test'
 	});
 
 	var resp = new twilio.TwimlResponse();
