@@ -15,12 +15,14 @@ var messagesRef = require('flybase').init(appname, 'messages', api_key);
 var receiveUserMessage = function(req, res){
 	var d = new Date();
 	var date = d.toLocaleString();
+	var seniorFirstName;
 
 	var number = req.param('From').substring(1);
 	console.log(number);
 
 	usersRef.where({'phone_number': number}).on('value', function(data){
 		var userId = data.raw[0]._id;
+		seniorFirstName = data.raw[0].name.split(' ')[0];
 		console.log('UserId: ' +  userId);
 		convoRef.where({'senior_id': userId, 'status':'open'}).on('value', function(convoData){
 			var conversation = convoData.raw[0]._id;
@@ -36,12 +38,18 @@ var receiveUserMessage = function(req, res){
 	});
 
 	var resp = new twilio.TwimlResponse();
-	resp.message("Got it! Rebecca will get back to you shortly.");
-	response.writeHead(200, {
+	resp.message("Hello" + seniorFirstName + ",\n This is Rebecca, I got your message and will get back to you shortly.");
+	res.writeHead(200, {
 		'Content-Type':'text/xml'
 	});
-	response.end(resp.toString());
+	res.end(resp.toString());
+};
+
+var replyToUser = function(req, res){
+	var d = new Date();
+	var date = d.toLocaleString();
 };
 
 router.receiveUserMessage = receiveUserMessage;
+router.replyToUser = replyToUser;
 module.exports = router;
