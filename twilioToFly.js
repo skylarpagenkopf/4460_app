@@ -22,8 +22,9 @@ var receiveUserMessage = function(req, res){
 	usersRef.where({'phone_number': number}).on('value', function(data){
 		var userId = data.raw[0]._id;
 		console.log('UserId: ' +  userId);
-		convoRef.where({'senior_id':userId, 'status':'open'}, function(convoData){
-			var conversation = convoData.raw[0];
+		convoRef.where({'senior_id': userId, 'status':'open'}).on('value', function(convoData){
+			var conversation = convoData.raw[0]._id;
+			console.log('ConvoID: ' + conversation);
 			messagesRef.push({
 				body: req.param('Body'),
 				conversation_id: conversation,
