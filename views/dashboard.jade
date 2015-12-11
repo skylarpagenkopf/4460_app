@@ -263,7 +263,7 @@ block content
 					datestring = datestring + date.getMinutes() + ' ' + ampm;
 				}
 			
-				newhtml = "<div class=\"list-group-item\"><div class=\"row vertical-align\"><div class=\"col-md-2 text-center senderinfo\"><a href=\"../lookup/#{user_id}\"><img src=\"#{user_picture}\" class=\"img-thumbnail img-responsive\"><h5>#{user_name}</h5></a></div><div class=\"col-md-10\"><p class=\"list-group-item-text\">" + message + "</p></div></div><div class=\"row\"> <div class=\"col-md-12 date text left\">" + datestring + "</div></div></div>"
+				newhtml = "<div class=\"list-group-item\"><div class=\"row vertical-align\"><div class=\"col-md-2 text-center senderinfo\"><a href=\"../lookup/#{user_id}\"><img src=\"http://static1.squarespace.com/static/51b3dc8ee4b051b96ceb10de/t/5310c62ae4b0b523b9c843d0/1393608235700/carl-fredricksen-from-pixars-up-is-real.jpg\" class=\"img-thumbnail img-responsive\"><h5>#{user_name}</h5></a></div><div class=\"col-md-10\"><p class=\"list-group-item-text\">" + message + "</p></div></div><div class=\"row\"> <div class=\"col-md-12 date text-right\">" + datestring + "</div></div></div>"
 				$(panel).append(newhtml);
 				$(textarea).val('');
 			}
