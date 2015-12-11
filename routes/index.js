@@ -36,7 +36,8 @@ router.get('/dashboard', function(req, res) {
 		senior_ids = [],
 		task = {},
 		message = {},
-		userinfo = {};
+		userinfo = {},
+		date;
 	// this nesting is horrible
 	usersFlyRef.on('value', function(snapshot) {
 		for (i=0; i<snapshot.raw.length; i++) {
@@ -66,12 +67,29 @@ router.get('/dashboard', function(req, res) {
 				for (i=0; i<tasks.length; i++) {
 					for (j=0; j<snapshot.raw.length; j++) {
 						if (tasks[i].id == snapshot.raw[j].conversation_id) {
+							date = new Date(snapshot.raw[j].time);
+							datestring = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + ' ';
+
+							if (date.getHours() > 11) {
+								datestring = datestring + (date.getHours() - 12) + ':';
+								ampm = 'PM';
+							} else {
+								datestring = datestring + date.getHours() + ':';
+								ampm = 'AM';
+							}
+					
+							if (date.getMinutes() < 10) {
+								datestring = datestring + '0' + date.getMinutes() + ' ' + ampm;
+							} else {
+								datestring = datestring + date.getMinutes() + ' ' + ampm;
+							}
+							
 							message = {
 								message: snapshot.raw[j].body,
 								sender_name: userinfo[snapshot.raw[j].sender_id].name,
 								sender_id: snapshot.raw[j].sender_id,
 								sender_picture: userinfo[snapshot.raw[j].sender_id].picture,
-								time: snapshot.raw[j].time
+								time: datestring
 							};
 							tasks[i].summary = snapshot.raw[j].body;
 							tasks[i].messages.push(message);
