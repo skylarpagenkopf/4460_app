@@ -80,7 +80,7 @@ block content
 					each role in data
 						if typeof role != 'string'
 							each task in role.tasks
-								.panel.panel-default.messagepanel(id='#{task.id}', class=count === 0 ? '' : 'Hidden')
+								.panel.panel-default.messagepanel(id='#{task.id}', senior_id='#{task.senior_id}', class=count === 0 ? '' : 'Hidden')
 									.panel-heading
 										.row
 											.col-md-8.tasktitle
@@ -216,8 +216,8 @@ block content
 			//use this for test convo
 			//- var senior_id = '566a38bfb9344doc1597497165';
 
-			var senior_id = '5667431989221doc286352926'; //this is carl
-			var worker_id = '566740b102b50doc1377109252'; //this is rebecca
+			var senior_id = $(panel).parent().attr('senior_id');
+			var worker_id = '#{user_id}'; //this is rebecca
 
 			convoFlyRef.where({'senior_id': senior_id , 'status':'open'}).on('value', function(convoData){
 				var newMessage = {
