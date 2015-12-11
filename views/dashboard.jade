@@ -245,9 +245,12 @@ block content
 					sender_id: worker_id,
 					time: date
 				};
-
-				//- messagesFlyRef.set(newMessage);
-				//- $.post("/reply", {JSON.stringify(newMessage)});
+				messagesFlyRef.set(newMessage);
+				$.ajax({
+				  type: "POST",
+				  url: "/reply",
+				  data: newMessage
+				});
 			});
 
 			messagesFlyRef.on('added', function(data)	{

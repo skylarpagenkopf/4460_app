@@ -36,7 +36,7 @@ var receiveUserMessage = function(req, res){
 				time: date
 			});
 			var resp = new twilio.TwimlResponse();
-			resp.message("\nHello " + seniorFirstName + ",\nThis is Rebecca, I got your message and will get back to you shortly.");
+			resp.message("\nHello " + seniorFirstName + "!\nThis is Rebecca!, I got your message and will get back to you shortly.");
 			res.writeHead(200, {
 				'Content-Type':'text/xml'
 			});
@@ -49,7 +49,33 @@ var receiveUserMessage = function(req, res){
 var replyToUser = function(req, res){
 	var d = new Date();
 	var date = d.toLocaleString();
-	console.log(JSON.stringify(req));
+
+	usersRef.where({'_id': req.data.senior_id}).on('value', function(snapshot){
+		var userId = snapshot.raw[0]._id;
+		var userNumber = '+' + snapshot.raw[0].phone_number;
+
+		convoRef.where({'senior_id': userId, 'status':'open'}).on('value', function(convoData){
+			var conversation = convoData.raw[0]._id;
+			console.log('ConvoID: ' + conversation);
+			messagesRef.push({
+				body: req.data.body,
+				conversation_id: conversation,
+				sender_id: req.data.worker_id,
+				time: date
+			});
+
+			client.messages.create({ 
+			    to: userNumber, 
+			    from: twilio_number, 
+			    body: req.data.body 
+			}, function(err, message) { 
+			    if(error){
+
+			    } 
+			});
+		});
+
+	});
 };
 
 router.receiveUserMessage = receiveUserMessage;
