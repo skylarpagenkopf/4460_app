@@ -226,8 +226,8 @@ block content
 					sender_id: worker_id,
 					time: date
 				};
-				console.log(newMessage);
-				messagesFlyRef.set(newMessage);
+				//- console.log(newMessage);
+				//- messagesFlyRef.set(newMessage);
 				$.ajax({
 				  type: "POST",
 				  url: "/reply",
@@ -236,7 +236,6 @@ block content
 			});
 
 			messagesFlyRef.on('added', function(data)	{
-				console.log(data.value());
 				var messData = data.value();
 				addChat(messData.from, messData.to, messData.body, messData.time);
 				//alert('something was added i supposed');
