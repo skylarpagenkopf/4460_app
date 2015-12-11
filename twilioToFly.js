@@ -67,7 +67,7 @@ var replyToUser = function(req, res){
 			    to: userNumber, 
 			    from: twilio_number, 
 			    body: req.body.body 
-			}, function(err, message) { 
+			}, function(error, message) { 
 			    if(error){
 
 			    } 

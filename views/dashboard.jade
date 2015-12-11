@@ -236,19 +236,45 @@ block content
 
 			messagesFlyRef.on('added', function(data)	{
 				var messData = data.value();
-				addChat(messData.from, messData.to, messData.body, messData.time);
+				if (messData.sender_id === '#{user_id}'){
+					addChatWorker(messData.from, messData.to, messData.body, messData.time);
 				//alert('something was added i supposed');
+				}
+
+				else {
+					addChatSender(messData.from, messData.to, messData.body, messData.time);					
+				}
 			});
 
-			function addChat(from, to, message, time){
+			function addChatSender(from, to, message, time){
 				var date = new Date(time);
 				// immediate update of user view w/o refresh
 				datestring = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + ' ';
 
 				if (date.getHours() > 11) {
-					datestring = datestring + (date.getHours() - 12) + ':';
-					ampm = 'PM';
+					datestring = datestring + (date.getHours() - 12) + ':'; ampm = 'PM'; } else {
+					datestring = datestring + date.getHours() + ':';
+					ampm = 'AM';
+				}
+		
+				if (date.getMinutes() < 10) {
+					datestring = datestring + '0' + date.getMinutes() + ' ' + ampm;
 				} else {
+					datestring = datestring + date.getMinutes() + ' ' + ampm;
+				}
+			
+				newhtml = "<div class=\"list-group-item\"><div class=\"row vertical-align\"><div class=\"col-md-2 text-center senderinfo\"><a href=\"../lookup/#{user_id}\"><img src=\"#{user_picture}\" class=\"img-thumbnail img-responsive\"><h5>#{user_name}</h5></a></div><div class=\"col-md-10\"><p class=\"list-group-item-text\">" + message + "</p></div></div><div class=\"row\"> <div class=\"col-md-12 date text left\">" + datestring + "</div></div></div>"
+				$(panel).append(newhtml);
+				$(textarea).val('');
+			}
+
+			function addChatWorker(from, to, message, time){
+				var date = new Date(time);
+				// immediate update of user view w/o refresh
+				datestring = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + ' ';
+
+				if (date.getHours() > 11) {
+					datestring = datestring + (date.getHours() - 12) + ':'; ampm = 'PM'; } else {
 					datestring = datestring + date.getHours() + ':';
 					ampm = 'AM';
 				}
