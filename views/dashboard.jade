@@ -246,8 +246,8 @@ block content
 					time: date
 				};
 
-				messagesFlyRef.set(newMessage);
-				$.post("/reply", {JSON.stringify(newMessage)});
+				//- messagesFlyRef.set(newMessage);
+				//- $.post("/reply", {JSON.stringify(newMessage)});
 			});
 
 			messagesFlyRef.on('added', function(data)	{
