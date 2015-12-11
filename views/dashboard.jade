@@ -209,42 +209,24 @@ block content
 				return;
 			}
 			
-			// immediate update of user view w/o refresh
-			datestring = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + ' ';
-
-			if (date.getHours() > 11) {
-				datestring = datestring + (date.getHours() - 12) + ':';
-				ampm = 'PM';
-			} else {
-				datestring = datestring + date.getHours() + ':';
-				ampm = 'AM';
-			}
-	
-			if (date.getMinutes() < 10) {
-				datestring = datestring + '0' + date.getMinutes() + ' ' + ampm;
-			} else {
-				datestring = datestring + date.getMinutes() + ' ' + ampm;
-			}
-			
 			var messagesFlyRef = new Flybase("baad4775-71b7-41ef-ad89-090c48e3956e", "sofia", "messages");
 			var convoFlyRef = new Flybase("baad4775-71b7-41ef-ad89-090c48e3956e", "sofia", "conversations");
 
 			var date = new Date().toLocaleString();
-			//___CHANGE___
-			//var senior_id = data.senior_id;
-			// var worker_id = someting;
-			var senior_id = '5667431989221doc286352926';
-			var worker_id = '566740b102b50doc1377109252';
+			//use this for test convo
+			//var senior_id = '566a38bfb9344doc1597497165';
 
+			var senior_id = '5667431989221doc286352926'; //this is carl
+			var worker_id = '566740b102b50doc1377109252'; //this is rebecca
 
 			convoFlyRef.where({'senior_id': senior_id , 'status':'open'}).on('value', function(convoData){
-				var convo = convoData.raw[0]._id;
 				var newMessage = {
 					body: message, 
-					conversation_id: convo,
+					conversation_id: convoData.data[0].value()._id,
 					sender_id: worker_id,
 					time: date
 				};
+				console.log(newMessage);
 				messagesFlyRef.set(newMessage);
 				$.ajax({
 				  type: "POST",
@@ -254,14 +236,32 @@ block content
 			});
 
 			messagesFlyRef.on('added', function(data)	{
+				console.log(data.value());
 				var messData = data.value();
-				addChat(messData.from, messData.to, messData.message, messData.timeof);
+				addChat(messData.from, messData.to, messData.body, messData.time);
 				//alert('something was added i supposed');
 			});
 
-			function addChat(from, two, message, time){
+			function addChat(from, to, message, time){
+				var date = new Date(time);
+				// immediate update of user view w/o refresh
+				datestring = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + ' ';
+
+				if (date.getHours() > 11) {
+					datestring = datestring + (date.getHours() - 12) + ':';
+					ampm = 'PM';
+				} else {
+					datestring = datestring + date.getHours() + ':';
+					ampm = 'AM';
+				}
+		
+				if (date.getMinutes() < 10) {
+					datestring = datestring + '0' + date.getMinutes() + ' ' + ampm;
+				} else {
+					datestring = datestring + date.getMinutes() + ' ' + ampm;
+				}
 			
-				newhtml = "<div class=\"list-group-item\"><div class=\"row vertical-align\"><div class=\"col-md-10\"><p class=\"list-group-item-text\">" + message + "</p></div><div class=\"col-md-2 text-center senderinfo\"><a href=\"../lookup/#{user_id}\"><img src=\"#{user_picture}\" class=\"img-thumbnail img-responsive\"><h5>The Doctor</h5></a></div></div><div class=\"row\"> <div class=\"col-md-12 date\">" + time + "</div></div></div>"
+				newhtml = "<div class=\"list-group-item\"><div class=\"row vertical-align\"><div class=\"col-md-10\"><p class=\"list-group-item-text\">" + message + "</p></div><div class=\"col-md-2 text-center senderinfo\"><a href=\"../lookup/#{user_id}\"><img src=\"#{user_picture}\" class=\"img-thumbnail img-responsive\"><h5>#{user_name}</h5></a></div></div><div class=\"row\"> <div class=\"col-md-12 date\">" + datestring + "</div></div></div>"
 				$(panel).append(newhtml);
 				$(textarea).val('');
 			}

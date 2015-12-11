@@ -83,7 +83,7 @@ router.get('/dashboard', function(req, res) {
 							} else {
 								datestring = datestring + date.getMinutes() + ' ' + ampm;
 							}
-							
+
 							message = {
 								message: snapshot.raw[j].body,
 								sender_name: userinfo[snapshot.raw[j].sender_id].name,
@@ -111,7 +111,8 @@ router.get('/dashboard', function(req, res) {
 					title: 'Dashboard',
 					data: data,
 					user_id: user_id,
-					user_picture: userinfo[user_id].picture
+					user_picture: userinfo[user_id].picture,
+					user_name: userinfo[user_id].name
 				});
 			});
 
