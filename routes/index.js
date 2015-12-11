@@ -5,6 +5,7 @@ var twilio = require('../twilioToFly');
 var api_key = 'baad4775-71b7-41ef-ad89-090c48e3956e';
 var appname = 'sofia';
 var usersFlyRef = require('flybase').init(appname, 'user', api_key);
+var usersNameLookup = require('flybase').init(appname, 'user', api_key);
 var messagesFlyRef = require('flybase').init(appname, 'messages', api_key);
 var conversationsFlyRef = require('flybase').init(appname, 'conversations', api_key);
 
@@ -114,13 +115,19 @@ router.get('/lookup', function(req, res) {
 });
 
 router.post('/lookup', function(req, res) {
-	// check if query matches a user profile
-		// redirect to user profile
-
-	// check if query matches task information
-		// aggregate task data
-		// send to dashboard template
-	res.render('lookup', { title: 'Lookup' });
+	usersNameLookup.where({name: req.body.search}).on('value', function(snapshot) {
+		// no result
+		if (snapshot.raw.length == 0) {
+			res.render('lookup', {title: 'Lookup'});
+		// just pick first result
+		} else {
+			if (snapshot.raw[0].type == 'senior') {
+				res.redirect('/lookup/' + snapshot.raw[0]._id);
+			} else {
+				res.redirect('/account');
+			}
+		}
+	});
 });
 
 router.get('/lookup/:account_id', function(req, res) {
@@ -213,7 +220,6 @@ var getTasks = function(params, callback){
 							} else {
 								datestring = datestring + date.getMinutes() + ' ' + ampm;
 							}
-
 							message = {
 								message: snapshot.raw[j].body,
 								sender_name: userinfo[snapshot.raw[j].sender_id].name,
