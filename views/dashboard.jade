@@ -247,7 +247,11 @@ block content
 				};
 
 				messagesFlyRef.set(newMessage);
-				$.post("/reply", {JSON.stringify(newMessage)});
+				$.ajax({
+				  type: "POST",
+				  url: "/reply",
+				  data: newMessage
+				});
 			});
 
 			messagesFlyRef.on('added', function(data)	{
